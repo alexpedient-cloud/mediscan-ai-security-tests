@@ -1,0 +1,15 @@
+FDA Readiness Assessment
+
+MediScan’s diagnostic AI system was evaluated through a comprehensive security testing framework designed to assess input validation, adversarial robustness, and end-to-end inference pipeline security. The goal of this assessment was to determine whether the model demonstrates sufficient resilience against malicious inputs and adversarial manipulation prior to FDA regulatory review.
+
+Initial baseline testing confirmed that the chest X-ray classification model achieved approximately 94% accuracy on clean test data. This baseline establishes the model’s diagnostic effectiveness under normal operating conditions and provides a reference point for evaluating performance degradation under adversarial conditions.
+
+Unit testing focused on validating the system’s ability to handle potentially malicious or malformed inputs. Tests confirmed that the model correctly rejects corrupted image inputs, images with invalid dimensions, and extreme pixel values outside acceptable ranges. Additional unit tests verified that prompt injection attempts designed to manipulate system output are detected and blocked. Authentication tests also confirmed that unauthorized requests cannot bypass access controls, ensuring that model inference endpoints remain protected.
+
+Adversarial robustness testing simulated Fast Gradient Sign Method (FGSM) attacks with epsilon values of 0.01, 0.05, 0.1, and 0.2. Results demonstrated a gradual degradation in classification accuracy as perturbation strength increased. The model maintained approximately 88% accuracy at epsilon = 0.1, which exceeds the predefined security threshold of 80% accuracy under moderate adversarial conditions. At higher perturbation levels (epsilon = 0.2), accuracy declined further, indicating that stronger adversarial attacks can meaningfully impact model performance. While this degradation is expected, it highlights the importance of implementing additional defensive strategies for production deployment.
+
+Integration testing evaluated the security of the entire inference pipeline. Metadata sanitization successfully blocked common injection patterns such as SQL-like payloads, preventing malicious inputs from propagating into downstream systems. Output validation tests confirmed that model responses do not expose personally identifiable information (PII), internal file paths, or debugging artifacts. These controls significantly reduce the risk of data leakage and system information disclosure.
+
+Overall, MediScan’s diagnostic AI demonstrates a solid baseline security posture and meets the defined acceptance threshold for adversarial robustness under moderate attack conditions. However, before full clinical deployment, it is recommended that the development team implement additional defenses such as adversarial training, anomaly detection for out-of-distribution inputs, and enhanced monitoring for model extraction attempts.
+
+Based on the results of unit, adversarial, and integration testing, the system appears largely ready for FDA review, with minor recommended improvements to further strengthen resilience against advanced adversarial attacks.
